@@ -10,8 +10,7 @@ permissions:
   contents: read
 
 env:
-  GHCR_REGISTRY: ghcr.io/supercorp-ai
-  DOCKERHUB_REGISTRY: docker.io/supercorp
+  GHCR_REGISTRY: ghcr.io/bencouture
 
 jobs:
   publish:
@@ -40,13 +39,6 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          registry: docker.io
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
       - name: Extract version
         id: ver
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> "$GITHUB_OUTPUT"
@@ -57,7 +49,6 @@ jobs:
         with:
           images: |
             ${{ env.GHCR_REGISTRY }}/supergateway
-            ${{ env.DOCKERHUB_REGISTRY }}/supergateway
           labels: |
             org.opencontainers.image.title=Supergateway
             org.opencontainers.image.version=${{ steps.ver.outputs.VERSION }}

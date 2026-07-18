@@ -132,8 +132,11 @@ export async function streamableHttpToStdio(args: StreamableHttpToStdioArgs) {
                 message.params?.protocolVersion
               ) {
                 // respect the protocol version from the stdio client's init request
-                possibleInitRequestMessage.params!.protocolVersion =
-                  message.params.protocolVersion
+                ;(
+                  possibleInitRequestMessage.params as {
+                    protocolVersion?: string
+                  }
+                ).protocolVersion = message.params.protocolVersion as string
               }
               result = await originalRequest.apply(this, [
                 possibleInitRequestMessage,
